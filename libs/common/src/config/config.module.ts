@@ -9,7 +9,7 @@ import { configValidationSchema } from 'config.schema';
   imports: [
     NestConfigModule.forRoot({
       envFilePath: ['.env'],
-      validationSchema: configValidationSchema
+      validationSchema: configValidationSchema,
     }),
   ],
   providers: [ConfigService],
