@@ -47,6 +47,10 @@ export abstract class AbstractRepository<T extends AbstractEntity<T>> {
     return this.entityRepository.findBy(where);
   }
 
+  async findAll(): Promise<T[]> {
+    return this.entityRepository.find();
+  }
+
   async findOneAndDelete(where: FindOptionsWhere<T>): Promise<void> {
     const result = await this.entityRepository.delete(where);
     if (!result.affected) {
