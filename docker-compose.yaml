@@ -8,6 +8,16 @@ services:
         max-file: "3"
     environment:
       - POSTGRES_PASSWORD
+  authentication:
+    build:
+      context: .
+      dockerfile: ./apps/authentication/Dockerfile
+      target: development
+    command: pnpm run start:dev authentication
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
   cars:
     build:
       context: .
