@@ -11,10 +11,13 @@ import { LocalAuthenticationGuard } from './guards/local-authentication.guard';
 import { AuthenticatedUser } from './users/authenticated-user.decorator';
 import { User } from './users/entities/user.entity';
 import { Response } from 'express';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { JwtAuthenticationGuard } from './guards/jwt-authentication.guard';
 
 @Controller('authentication')
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
+
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(LocalAuthenticationGuard)
   @Post('login')
@@ -23,5 +26,12 @@ export class AuthenticationController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<User> {
     return this.authenticationService.login(user, response);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(JwtAuthenticationGuard)
+  @MessagePattern('authenticate')
+  async authenticate(@Payload() data: any) {
+    return data.user;
   }
 }
