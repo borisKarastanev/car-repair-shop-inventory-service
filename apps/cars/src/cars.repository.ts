@@ -1,5 +1,10 @@
 import { AbstractRepository } from '@app/common';
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { Car } from './entities/car.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
@@ -27,6 +32,14 @@ export class CarsRepository extends AbstractRepository<Car> {
       vin,
     });
 
-    return this.create(car);
+    try {
+      return await this.create(car);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException(`Car with VIN ${car.vin} already exists!`);
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 }

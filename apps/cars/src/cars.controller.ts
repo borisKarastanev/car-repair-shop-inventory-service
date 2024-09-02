@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { JwtAuthenticationGuard } from '@app/common/authentication';
 
 @Controller('cars')
+@UseGuards(JwtAuthenticationGuard)
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
