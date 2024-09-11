@@ -1,6 +1,8 @@
 import { AbstractEntity } from '@app/common/database/abstract.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { CarStatus } from '../car-status.enum';
+import { User } from 'apps/authentication/src/users/entities/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Car extends AbstractEntity<Car> {
@@ -18,4 +20,8 @@ export class Car extends AbstractEntity<Car> {
 
   @Column({ type: 'varchar', nullable: true })
   status: CarStatus;
+
+  @ManyToOne(() => User, (user) => user.cars, { eager: false })
+  @Exclude({ toPlainOnly: true })
+  user: User;
 }

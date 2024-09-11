@@ -6,11 +6,12 @@ import { Car } from './entities/car.entity';
 import { CarsRepository } from './cars.repository';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTHENTICATION_SERVICE } from '@app/common/constants/services';
+import { User } from 'apps/authentication/src/users/entities/user.entity';
 
 @Module({
   imports: [
     DatabaseModule,
-    DatabaseModule.forFeature([Car]),
+    DatabaseModule.forFeature([Car, User]),
     LoggerModule,
     ClientsModule.register([
       {

@@ -8,11 +8,11 @@ import {
 } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { LocalAuthenticationGuard } from './guards/local-authentication.guard';
-import { AuthenticatedUser } from './users/authenticated-user.decorator';
 import { User } from './users/entities/user.entity';
 import { Response } from 'express';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthenticationGuard } from './guards/jwt-authentication.guard';
+import { AuthenticatedUser } from '@app/common';
 
 @Controller('authentication')
 export class AuthenticationController {

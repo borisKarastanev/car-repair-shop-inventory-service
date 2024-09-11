@@ -9,6 +9,7 @@ import { Car } from './entities/car.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { CreateCarDto } from './dto/create-car.dto';
+import { User } from 'apps/authentication/src/users/entities/user.entity';
 
 @Injectable()
 export class CarsRepository extends AbstractRepository<Car> {
@@ -22,7 +23,7 @@ export class CarsRepository extends AbstractRepository<Car> {
     super(carsRepository, entityManager);
   }
 
-  async createCar(createCarDto: CreateCarDto): Promise<Car> {
+  async createCar(createCarDto: CreateCarDto, user: User): Promise<Car> {
     const { make, model, odometer, vin } = createCarDto;
 
     const car = new Car({
@@ -30,6 +31,7 @@ export class CarsRepository extends AbstractRepository<Car> {
       model,
       odometer,
       vin,
+      user,
     });
 
     try {

@@ -12,6 +12,9 @@ import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { JwtAuthenticationGuard } from '@app/common/authentication';
+import { AuthenticatedUser } from '@app/common';
+import { User } from 'apps/authentication/src/users/entities/user.entity';
+import { Car } from './entities/car.entity';
 
 @Controller('cars')
 @UseGuards(JwtAuthenticationGuard)
@@ -19,27 +22,34 @@ export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
   @Post()
-  create(@Body() createCarDto: CreateCarDto) {
-    return this.carsService.create(createCarDto);
+  create(
+    @Body() createCarDto: CreateCarDto,
+    @AuthenticatedUser() user: User,
+  ): Promise<Car> {
+    return this.carsService.create(createCarDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.carsService.findAll();
+  findAll(@AuthenticatedUser() user: User): Promise<Car[]> {
+    return this.carsService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.carsService.findOne(id);
+  findOne(@AuthenticatedUser() user: User, @Param('id') id: string) {
+    return this.carsService.findOne(id, user);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
-    return this.carsService.update(id, updateCarDto);
+  update(
+    @AuthenticatedUser() user: User,
+    @Param('id') id: string,
+    @Body() updateCarDto: UpdateCarDto,
+  ) {
+    return this.carsService.update(id, user, updateCarDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.carsService.remove(id);
+  remove(@AuthenticatedUser() user: User, @Param('id') id: string) {
+    return this.carsService.remove(id, user);
   }
 }
