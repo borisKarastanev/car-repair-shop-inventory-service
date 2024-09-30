@@ -1,8 +1,7 @@
 import { AbstractEntity } from '@app/common/database/abstract.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
-import { CarStatus } from '../car-status.enum';
-import { User } from 'apps/authentication/src/users/entities/user.entity';
-import { Exclude } from 'class-transformer';
+import { Column, Entity, OneToMany } from 'typeorm';
+import { Task } from 'apps/tasks/src/entities/task.entity';
+import { EntityStatus } from '@app/common/enums/entity-status.enum';
 
 @Entity()
 export class Car extends AbstractEntity<Car> {
@@ -19,9 +18,8 @@ export class Car extends AbstractEntity<Car> {
   vin: string;
 
   @Column({ type: 'varchar', nullable: true })
-  status: CarStatus;
+  status: EntityStatus;
 
-  @ManyToOne(() => User, (user) => user.cars, { eager: false })
-  @Exclude({ toPlainOnly: true })
-  user: User;
+  @OneToMany(() => Task, (task) => task.car, { eager: true })
+  tasks: Task[];
 }
