@@ -18,6 +18,16 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
+  tasks:
+    build:
+      context: .
+      dockerfile: ./apps/tasks/Dockerfile
+      target: development
+    command: pnpm run start:dev tasks
+    ports:
+      - '3002:3002'
+    volumes:
+      - .:/usr/src/app
   cars:
     build:
       context: .

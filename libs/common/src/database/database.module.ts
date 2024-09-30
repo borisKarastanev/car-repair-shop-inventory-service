@@ -4,6 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '../config/config.module';
 
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
+import { User } from 'apps/authentication/src/users/entities/user.entity';
+import { Car } from 'apps/cars/src/entities/car.entity';
+import { Task } from 'apps/tasks/src/entities/task.entity';
 
 @Module({
   imports: [
@@ -19,6 +22,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
         database: configService.get('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: true,
+        entities: [Car, User, Task],
       }),
     }),
   ],

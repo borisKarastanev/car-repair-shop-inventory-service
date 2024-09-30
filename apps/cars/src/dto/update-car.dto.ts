@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateCarDto } from './create-car.dto';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { CarStatus } from '../car-status.enum';
+import { EntityStatus } from '@app/common/enums/entity-status.enum';
 
 export class UpdateCarDto extends PartialType(CreateCarDto) {
   @IsString()
@@ -16,7 +16,7 @@ export class UpdateCarDto extends PartialType(CreateCarDto) {
   @IsString()
   public vin: string;
 
-  @IsEnum(CarStatus)
+  @IsEnum(EntityStatus)
   @IsOptional()
-  status: CarStatus;
+  public status: EntityStatus;
 }

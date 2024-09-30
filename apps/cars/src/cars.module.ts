@@ -5,21 +5,33 @@ import { CarsController } from './cars.controller';
 import { Car } from './entities/car.entity';
 import { CarsRepository } from './cars.repository';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AUTHENTICATION_SERVICE } from '@app/common/constants/services';
+import {
+  AUTHENTICATION_SERVICE,
+  TASKS_SERVICE,
+} from '@app/common/constants/services';
 import { User } from 'apps/authentication/src/users/entities/user.entity';
+import { Task } from 'apps/tasks/src/entities/task.entity';
 
 @Module({
   imports: [
     DatabaseModule,
-    DatabaseModule.forFeature([Car, User]),
+    DatabaseModule.forFeature([Car, User, Task]),
     LoggerModule,
     ClientsModule.register([
       {
         name: AUTHENTICATION_SERVICE,
         transport: Transport.TCP,
         options: {
-          host: 'authentication',
-          port: 3002,
+          host: AUTHENTICATION_SERVICE,
+          port: 4002,
+        },
+      },
+      {
+        name: TASKS_SERVICE,
+        transport: Transport.TCP,
+        options: {
+          host: TASKS_SERVICE,
+          port: 4003,
         },
       },
     ]),
