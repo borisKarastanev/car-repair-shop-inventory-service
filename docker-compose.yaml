@@ -28,6 +28,16 @@ services:
       - '3002:3002'
     volumes:
       - .:/usr/src/app
+  clients:
+    build:
+      context: .
+      dockerfile: ./apps/clients/Dockerfile
+      target: development
+    command: pnpm run start:dev clients
+    ports:
+      - '3003:3003'
+    volumes:
+      - .:/usr/src/app
   cars:
     build:
       context: .

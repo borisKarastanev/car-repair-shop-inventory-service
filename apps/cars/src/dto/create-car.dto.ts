@@ -16,4 +16,8 @@ export class CreateCarDto {
   @IsNotEmpty()
   @IsString()
   public vin: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public clientId: string;
 }

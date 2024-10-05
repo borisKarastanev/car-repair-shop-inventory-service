@@ -19,4 +19,8 @@ export class UpdateCarDto extends PartialType(CreateCarDto) {
   @IsEnum(EntityStatus)
   @IsOptional()
   public status: EntityStatus;
+
+  @IsString()
+  @IsOptional()
+  public clientId: string;
 }

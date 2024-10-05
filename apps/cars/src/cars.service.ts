@@ -13,15 +13,19 @@ import { defaultIfEmpty, firstValueFrom } from 'rxjs';
 import { CreateTaskDto } from 'apps/tasks/src/dto/create-task.dto';
 import { Task } from 'apps/tasks/src/entities/task.entity';
 import { UpdateTaskDto } from 'apps/tasks/src/dto/update-task.dto';
+import { ClientsMessageService } from './services/clients-message.service';
 
 @Injectable()
 export class CarsService {
   constructor(
     @Inject(TASKS_SERVICE) private readonly tasksClient: ClientProxy,
     private readonly carsRepository: CarsRepository,
+    private readonly clientsMessageService: ClientsMessageService,
   ) {}
   async create(createCarDto: CreateCarDto): Promise<Car> {
-    return await this.carsRepository.createCar(createCarDto);
+    const { clientId } = createCarDto;
+    const client = await this.clientsMessageService.findOneClient(clientId);
+    return await this.carsRepository.createCar(createCarDto, client);
   }
 
   async findAll(): Promise<Car[]> {
@@ -47,6 +51,11 @@ export class CarsService {
     } catch (error) {
       new InternalServerErrorException();
     }
+  }
+
+  async findAllCarsForClient(clientId: string): Promise<Car[]> {
+    const client = await this.clientsMessageService.findOneClient(clientId);
+    return await this.carsRepository.find({ client });
   }
 
   async findTaskForCar(id: string, taskId: string) {

@@ -43,6 +43,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/tasks/tsconfig.app.json"
       }
+    },
+    "clients": {
+      "type": "application",
+      "root": "apps/clients",
+      "entryFile": "main",
+      "sourceRoot": "apps/clients/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/clients/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
