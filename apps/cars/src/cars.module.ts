@@ -7,10 +7,13 @@ import { CarsRepository } from './cars.repository';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import {
   AUTHENTICATION_SERVICE,
+  CLIENTS_SERVICE,
   TASKS_SERVICE,
 } from '@app/common/constants/services';
 import { User } from 'apps/authentication/src/users/entities/user.entity';
 import { Task } from 'apps/tasks/src/entities/task.entity';
+import { ClientsController } from './controllers/clients/clients.controller';
+import { ClientsMessageService } from './services/clients-message.service';
 
 @Module({
   imports: [
@@ -34,9 +37,17 @@ import { Task } from 'apps/tasks/src/entities/task.entity';
           port: 4003,
         },
       },
+      {
+        name: CLIENTS_SERVICE,
+        transport: Transport.TCP,
+        options: {
+          host: CLIENTS_SERVICE,
+          port: 4004,
+        },
+      },
     ]),
   ],
-  controllers: [CarsController],
-  providers: [CarsService, CarsRepository],
+  controllers: [CarsController, ClientsController],
+  providers: [CarsService, ClientsMessageService, CarsRepository],
 })
 export class CarsModule {}

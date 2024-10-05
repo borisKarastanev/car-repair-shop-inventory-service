@@ -1,7 +1,9 @@
 import { AbstractEntity } from '@app/common/database/abstract.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Task } from 'apps/tasks/src/entities/task.entity';
 import { EntityStatus } from '@app/common/enums/entity-status.enum';
+import { Client } from 'apps/clients/src/entities/client.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Car extends AbstractEntity<Car> {
@@ -22,4 +24,8 @@ export class Car extends AbstractEntity<Car> {
 
   @OneToMany(() => Task, (task) => task.car, { eager: true })
   tasks: Task[];
+
+  @ManyToOne(() => Client, (client) => client.cars, { eager: true })
+  @Exclude({ toPlainOnly: true })
+  client: Client;
 }

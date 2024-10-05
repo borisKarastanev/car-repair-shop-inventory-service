@@ -7,6 +7,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 import { User } from 'apps/authentication/src/users/entities/user.entity';
 import { Car } from 'apps/cars/src/entities/car.entity';
 import { Task } from 'apps/tasks/src/entities/task.entity';
+import { Client } from 'apps/clients/src/entities/client.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { Task } from 'apps/tasks/src/entities/task.entity';
         database: configService.get('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: true,
-        entities: [Car, User, Task],
+        entities: [Car, User, Task, Client],
       }),
     }),
   ],
