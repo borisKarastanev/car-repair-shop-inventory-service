@@ -52,6 +52,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/clients/tsconfig.app.json"
       }
+    },
+    "invoices": {
+      "type": "application",
+      "root": "apps/invoices",
+      "entryFile": "main",
+      "sourceRoot": "apps/invoices/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/invoices/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
