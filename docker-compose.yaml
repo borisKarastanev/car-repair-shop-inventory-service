@@ -8,6 +8,19 @@ services:
         max-file: "3"
     environment:
       - POSTGRES_PASSWORD
+
+  invoices_postgres:
+    image: postgres
+    restart: always
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    environment:
+      - POSTGRES_PASSWORD
+    volumes:
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+
   authentication:
     build:
       context: .
@@ -18,6 +31,7 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
+
   tasks:
     build:
       context: .
@@ -28,6 +42,20 @@ services:
       - '3002:3002'
     volumes:
       - .:/usr/src/app
+
+  invoices:
+    build:
+      context: .
+      dockerfile: ./apps/invoices/Dockerfile
+      target: development
+    command: pnpm run start:dev invoices
+    ports:
+      - '3004:3004'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - invoices_postgres
+
   clients:
     build:
       context: .
@@ -38,6 +66,7 @@ services:
       - '3003:3003'
     volumes:
       - .:/usr/src/app
+      
   cars:
     build:
       context: .

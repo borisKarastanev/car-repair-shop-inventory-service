@@ -16,27 +16,31 @@ import { Car } from './entities/car.entity';
 import { CreateTaskDto } from 'apps/tasks/src/dto/create-task.dto';
 import { Task } from 'apps/tasks/src/entities/task.entity';
 import { UpdateTaskDto } from 'apps/tasks/src/dto/update-task.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('cars')
-@UseGuards(JwtAuthenticationGuard)
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
+  @UseGuards(JwtAuthenticationGuard)
   @Post()
   async create(@Body() createCarDto: CreateCarDto): Promise<Car> {
     return await this.carsService.create(createCarDto);
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Get()
   async findAll(): Promise<Car[]> {
     return await this.carsService.findAll();
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Car> {
     return await this.carsService.findOne(id);
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -45,18 +49,32 @@ export class CarsController {
     return await this.carsService.update(id, updateCarDto);
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     return await this.carsService.remove(id);
   }
 
+  @MessagePattern('fetch_one_car')
+  async findOneMessage(@Payload() payload: any): Promise<Car> {
+    const id = payload?.carId;
+    return await this.carsService.findOne(id);
+  }
+
+  @MessagePattern('fetch_all_cars')
+  async findAllMessage(): Promise<Car[]> {
+    return await this.carsService.findAll();
+  }
+
   // Tasks
 
+  @UseGuards(JwtAuthenticationGuard)
   @Get(':id/tasks')
   async findAllTasksForCar(@Param('id') id: string) {
     return await this.carsService.findAllTasksForCar(id);
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Get(':id/tasks/:taskId')
   async findTaskForCar(
     @Param('id') id: string,
@@ -65,6 +83,7 @@ export class CarsController {
     return await this.carsService.findTaskForCar(id, taskId);
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Post(':id/tasks')
   async createTask(
     @Param('id') id: string,
@@ -73,6 +92,7 @@ export class CarsController {
     return await this.carsService.createTaskForCar(id, createTaskDto);
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Patch(':id/tasks/:taskId')
   async updateTask(
     @Param('taskId') taskId: string,
@@ -81,6 +101,7 @@ export class CarsController {
     return await this.carsService.updateTaskForCar(taskId, updateTaskDto);
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Delete(':id/tasks/:taskId')
   async deleteTask(
     @Param('id') id: string,

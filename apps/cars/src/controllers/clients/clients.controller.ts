@@ -1,4 +1,4 @@
-import { JwtAuthenticationGuard } from '@app/common';
+import { AuthenticatedUser, JwtAuthenticationGuard } from '@app/common';
 import {
   Body,
   Controller,
@@ -15,6 +15,9 @@ import { Client } from 'apps/clients/src/entities/client.entity';
 import { UpdateClientDto } from 'apps/clients/src/dto/update-client.dto';
 import { Car } from '../../entities/car.entity';
 import { CarsService } from '../../cars.service';
+import { Invoice } from 'apps/invoices/src/entities/invoice.entity';
+import { InvoicesMessageService } from '../../services/invoices-message.service';
+import { User } from 'apps/authentication/src/users/entities/user.entity';
 
 @Controller('clients')
 @UseGuards(JwtAuthenticationGuard)
@@ -22,6 +25,7 @@ export class ClientsController {
   constructor(
     private readonly clientsMessageService: ClientsMessageService,
     private readonly carsService: CarsService,
+    private readonly invoicesMessageService: InvoicesMessageService,
   ) {}
 
   @Post()
@@ -42,6 +46,14 @@ export class ClientsController {
   @Get(':id/cars')
   async findAllCarsForClient(@Param('id') id: string): Promise<Car[]> {
     return await this.carsService.findAllCarsForClient(id);
+  }
+
+  @Get(':id/invoices')
+  async findAllInvoicesForClient(
+    @Param('id') id: string,
+    @AuthenticatedUser() user: User,
+  ): Promise<Invoice[]> {
+    return await this.invoicesMessageService.findAllInvoicesForClient(id, user);
   }
 
   @Patch(':id')
